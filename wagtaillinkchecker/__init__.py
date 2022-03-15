@@ -1,6 +1,10 @@
 __version__ = '0.1.0'
 
-default_app_config = 'wagtaillinkchecker.apps.WagtailLinkchekerAppConfig'
+# define default AppConfig - obsolete in Django 3.2 and above
+from django import VERSION
+django_float_version = float(f"{VERSION[0]}.{VERSION[1]}")
+if django_float_version < 3.2:
+      default_app_config = 'wagtaillinkchecker.apps.WagtailLinkchekerAppConfig'
 
 HTTP_STATUS_CODES = {
     100: ('Continue', 'Request received, please continue'),
