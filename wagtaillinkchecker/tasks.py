@@ -2,7 +2,7 @@ from celery import shared_task
 from wagtaillinkchecker.scanner import get_url, clean_url
 from wagtaillinkchecker.models import ScanLink
 from bs4 import BeautifulSoup
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from django.db.utils import IntegrityError
 from django.utils import timezone

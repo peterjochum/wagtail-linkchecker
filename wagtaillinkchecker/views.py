@@ -8,7 +8,7 @@ try:
 except ModuleNotFoundError:
     from functools import lru_cache
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from wagtaillinkchecker.forms import SitePreferencesForm
 from wagtaillinkchecker.models import SitePreferences, Scan
