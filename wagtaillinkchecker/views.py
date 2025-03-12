@@ -18,7 +18,7 @@ from wagtaillinkchecker import utils
 
 if utils.is_wagtail_version_more_than_equal_to_4_0():
     from wagtail.admin import messages
-    from wagtail.admin.panels import ObjectList, extract_panel_definitions_from_model_class
+    from wagtail.admin.panels import ObjectList, extract_panel_definitions_from_model_class, PanelGroup
     from wagtail.models import Site
 
 elif utils.is_wagtail_version_more_than_equal_to_2_0():
@@ -35,7 +35,9 @@ else:
 def get_edit_handler(model):
     panels = extract_panel_definitions_from_model_class(model, ["site"])
 
-    if utils.is_wagtail_version_more_than_equal_to_2_5():
+    if utils.is_wagtail_version_more_than_equal_to_4_0():
+        return ObjectList(panels).bind_to_model(model)
+    elif utils.is_wagtail_version_more_than_equal_to_2_5():
         return ObjectList(panels).bind_to(model=model)
     else:
         return ObjectList(panels).bind_to_model(model)
@@ -81,6 +83,7 @@ def settings(request):
     form = SitePreferencesForm(instance=instance)
     form.instance.site = site
     object_list = get_edit_handler(SitePreferences)
+    edit_handler = None
 
     if request.method == "POST":
         instance = SitePreferences.objects.filter(site=site).first()
@@ -93,7 +96,9 @@ def settings(request):
             messages.error(request, _("The form could not be saved due to validation errors"))
     else:
         form = SitePreferencesForm(instance=instance)
-        if utils.is_wagtail_version_more_than_equal_to_2_5():
+        if utils.is_wagtail_version_more_than_equal_to_4_0():
+            edit_handler = object_list.get_bound_panel(instance, request, form)
+        elif utils.is_wagtail_version_more_than_equal_to_2_5():
             edit_handler = object_list.bind_to(instance=SitePreferences, form=form, request=request)
         else:
             edit_handler = object_list.bind_to_instance(instance=SitePreferences, form=form, request=request)
