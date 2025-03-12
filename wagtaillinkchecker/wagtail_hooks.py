@@ -12,7 +12,10 @@ if utils.is_wagtail_version_more_than_equal_to_2_0():
 else:
     from django.core import urlresolvers
 
-if utils.is_wagtail_version_more_than_equal_to_2_0():
+if utils.is_wagtail_version_more_than_equal_to_4_0():
+    from wagtail.admin.menu import MenuItem
+    from wagtail import hooks
+elif utils.is_wagtail_version_more_than_equal_to_2_0():
     from wagtail.admin.menu import MenuItem
     from wagtail.core import hooks
 else:
@@ -20,18 +23,15 @@ else:
     from wagtail.wagtailcore import hooks
 
 
-@hooks.register('register_admin_urls')
+@hooks.register("register_admin_urls")
 def register_admin_urls():
     return [
-        path('link-checker/', include(urls)),
+        path("link-checker/", include(urls)),
     ]
 
 
-@hooks.register('register_settings_menu_item')
+@hooks.register("register_settings_menu_item")
 def register_menu_settings():
     return MenuItem(
-        _('Link Checker'),
-        urlresolvers.reverse('wagtaillinkchecker'),
-        classnames='icon icon-link',
-        order=300
+        _("Link Checker"), urlresolvers.reverse("wagtaillinkchecker"), classnames="icon icon-link", order=300
     )
